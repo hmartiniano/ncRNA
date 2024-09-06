@@ -1,0 +1,20 @@
+[
+  {
+    "gene_symbol": "BRCA1",
+    "panel_name": "Breast and Ovarian Cancer Susceptibility",
+    "mode_of_inheritance": "Autosomal Dominant",
+    "penetrance": "High"
+  },
+  {
+    "gene_symbol": "BRCA2",
+    "panel_name": "Breast and Ovarian Cancer Susceptibility",
+    "mode_of_inheritance": "Autosomal Dominant",
+    "penetrance": "High"
+  },
+  {
+    "gene_symbol": "TP53",
+    "panel_name": "Li-Fraumeni Syndrome",
+    "mode_of_inheritance": "Autosomal Dominant",
+    "penetrance": "High"
+  }
+]
