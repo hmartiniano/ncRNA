@@ -19,6 +19,12 @@
         width: 80%; /* Or set a specific pixel value, like 'width: 800px;' */
         margin: 0 auto; /* Center the table horizontally */
     }
+    
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
 </style>
 </head>
 <body>
@@ -39,6 +45,14 @@
         </thead>
         <tbody>
         </tbody>
+        <tfoot>
+            <tr>
+                <th>Gene Symbol</th>
+                <th>Panel Name</th>
+                <th>Mode of Inheritance</th>
+                <th>Penetrance</th>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
