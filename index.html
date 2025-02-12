@@ -1,40 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Gene Data Table</title>
+<title>Gene Data Browser</title>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <style>
+    :root {
+        --primary-color: #1a237e;
+        --secondary-color: #4a148c;
+        --accent-color: #7c4dff;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+    }
+
     header {
-        background-color: #0000FF;
-        padding: 20px;
-        text-align: center;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    #tableContainer {
-        padding: 20px;
+    .nav-container {
+        background-color: var(--secondary-color);
+        padding: 1rem;
     }
 
-    /* Adjust table width */
-    #geneDataTable {
-        width: 80%; /* Or set a specific pixel value, like 'width: 800px;' */
-        margin: 0 auto; /* Center the table horizontally */
+    nav {
+        max-width: 1200px;
+        margin: 0 auto;
     }
-    
+
+    .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        margin-right: 1rem;
+    }
+
+    .nav-link:hover {
+        background-color: var(--accent-color);
+    }
+
+    .nav-link.active {
+        background-color: var(--accent-color);
+    }
+
+    .section {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: none;
+    }
+
+    .section.active {
+        display: block;
+    }
+
+    #geneDataTable_wrapper {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
     tfoot input {
-        display: table-row-group;
         width: 100%;
-        padding: 3px;
+        padding: 8px;
         box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .about-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.6;
     }
 </style>
 </head>
 <body>
 
 <header>
-    <h1>Gene Data Table</h1>
+    <h1>Genomics Data Browser</h1>
 </header>
 
-<div id="tableContainer">
+<div class="nav-container">
+    <nav>
+        <a href="#data" class="nav-link active">Gene Data</a>
+        <a href="#about" class="nav-link">About</a>
+    </nav>
+</div>
+
+<section id="dataSection" class="section active">
     <table id="geneDataTable" class="display">
         <thead>
             <tr>
@@ -44,8 +107,7 @@
                 <th>Penetrance</th>
             </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
         <tfoot>
             <tr>
                 <th>Gene Symbol</th>
@@ -55,12 +117,43 @@
             </tr>
         </tfoot>
     </table>
-</div>
+</section>
+
+<section id="aboutSection" class="section">
+    <div class="about-content">
+        <h2>About This Application</h2>
+        <p>This genomic data browser provides interactive access to curated genetic information including:</p>
+        <ul>
+            <li>Gene symbols and associated panels</li>
+            <li>Inheritance patterns</li>
+            <li>Penetrance data</li>
+        </ul>
+        <h3>Features</h3>
+        <ul>
+            <li>Real-time column filtering</li>
+            <li>Responsive design</li>
+            <li>Client-side search capabilities</li>
+            <li>Multi-column sorting</li>
+        </ul>
+        <p>Data is loaded from a JSON source and rendered client-side using DataTables.</p>
+    </div>
+</section>
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function () {
+    // Navigation handling
+    $('.nav-link').on('click', function(e) {
+        e.preventDefault();
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+        
+        const target = $(this).attr('href').substring(1);
+        $('.section').removeClass('active');
+        $(`#${target}Section`).addClass('active');
+    });
+
     $.getJSON('gene_data.json', function(data) {
         $('#geneDataTable').DataTable({
             data: data,
