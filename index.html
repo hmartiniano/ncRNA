@@ -60,19 +60,20 @@
         display: block;
     }
 
-    #geneDataTable_wrapper {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        overflow: hidden;
+    /* Restored original table styling */
+    #tableContainer {
+        padding: 20px;
     }
 
+    #geneDataTable {
+        width: 80%;
+        margin: 0 auto;
+    }
+    
     tfoot input {
         width: 100%;
-        padding: 8px;
+        padding: 3px;
         box-sizing: border-box;
-        border: 1px solid #ddd;
-        border-radius: 4px;
     }
 
     .about-content {
@@ -98,25 +99,27 @@
 </div>
 
 <section id="dataSection" class="section active">
-    <table id="geneDataTable" class="display">
-        <thead>
-            <tr>
-                <th>Gene Symbol</th>
-                <th>Panel Name</th>
-                <th>Mode of Inheritance</th>
-                <th>Penetrance</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-            <tr>
-                <th>Gene Symbol</th>
-                <th>Panel Name</th>
-                <th>Mode of Inheritance</th>
-                <th>Penetrance</th>
-            </tr>
-        </tfoot>
-    </table>
+    <div id="tableContainer"> <!-- Restored original container -->
+        <table id="geneDataTable" class="display">
+            <thead>
+                <tr>
+                    <th>Gene Symbol</th>
+                    <th>Panel Name</th>
+                    <th>Mode of Inheritance</th>
+                    <th>Penetrance</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>Gene Symbol</th>
+                    <th>Panel Name</th>
+                    <th>Mode of Inheritance</th>
+                    <th>Penetrance</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </section>
 
 <section id="aboutSection" class="section">
@@ -154,6 +157,7 @@ $(document).ready(function () {
         $(`#${target}Section`).addClass('active');
     });
 
+    // Original working table initialization
     $.getJSON('gene_data.json', function(data) {
         $('#geneDataTable').DataTable({
             data: data,
@@ -165,23 +169,21 @@ $(document).ready(function () {
             ],
             initComplete: function () {
                 this.api()
-                .columns()
-                .every(function () {
-                    let column = this;
-                    let title = column.footer().textContent;
- 
-                    // Create input element
-                    let input = document.createElement('input');
-                    input.placeholder = title;
-                    column.footer().replaceChildren(input);
- 
-                    // Event listener for user input
-                    input.addEventListener('keyup', () => {
-                        if (column.search() !== this.value) {
-                            column.search(input.value).draw();
-                        }
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
+
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        column.footer().replaceChildren(input);
+
+                        input.addEventListener('keyup', () => {
+                            if (column.search() !== input.value) {
+                                column.search(input.value).draw();
+                            }
+                        });
                     });
-                });
             }
         });
     });
